@@ -1,0 +1,56 @@
+==================================================================
+https://keybase.io/krm
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of https://krmc.me
+  * I am krm (https://keybase.io/krm) on keybase.
+  * I have a public key ASDC06rwdZlwR060Y5D6dSKKtbRrBuRABVfudKGXk1uDIwo
+
+To do so, I am signing this object:
+
+{
+  "body": {
+    "key": {
+      "eldest_kid": "0120c2d3aaf0759970474eb46390fa75228ab5b46b06e4400557ee74a197935b83230a",
+      "host": "keybase.io",
+      "kid": "0120c2d3aaf0759970474eb46390fa75228ab5b46b06e4400557ee74a197935b83230a",
+      "uid": "0f42ad16aa05e4a17becb97bb9bcef19",
+      "username": "krm"
+    },
+    "merkle_root": {
+      "ctime": 1558495854,
+      "hash": "451559b5b3c3dc58706891eb9b5b8f46f5cb9a54e2921f19bf8589d4ef80bafa746cfd4754c51a308efc539b05920362e99dc4d2b952697e44a11adff4f4a54a",
+      "hash_meta": "ac1178a56bc4eae796c14a03a7b1dca949376eca699071cf8fc1f6fa6ef9fbd8",
+      "seqno": 5422905
+    },
+    "service": {
+      "entropy": "ctCRNggBDSwKmdr+ZFhLt7Lb",
+      "hostname": "krmc.me",
+      "protocol": "https:"
+    },
+    "type": "web_service_binding",
+    "version": 2
+  },
+  "client": {
+    "name": "keybase.io go client",
+    "version": "4.0.0"
+  },
+  "ctime": 1558495882,
+  "expire_in": 504576000,
+  "prev": "f4c94b5ced49fe958c13f9c8205c302c8dfd7a6e64f481d6d203e3bf5507737c",
+  "seqno": 6,
+  "tag": "signature"
+}
+
+which yields the signature:
+
+hKRib2R5hqhkZXRhY2hlZMOpaGFzaF90eXBlCqNrZXnEIwEgwtOq8HWZcEdOtGOQ+nUiirW0awbkQAVX7nShl5NbgyMKp3BheWxvYWTESpcCBsQg9MlLXO1J/pWME/nIIFwwLI39em5k9IHW0gPjv1UHc3zEICnaexZvnlK/0+EwvoeO1cHPgRWLBpXs49IXsL1OO/9WAgHCo3NpZ8RAvxgLoNE5h82eYaWaxV6OjWoreI3Q8MoBA+XoxeuNASTQwgRwwYuJt/ZV3tGMrgUUcN5FO7OFa111lOJXFMO7DqhzaWdfdHlwZSCkaGFzaIKkdHlwZQildmFsdWXEIK5hbadpKgkCwJ0ijWsn8mFQi4Ii4VEFG4ZKZgCylDoPo3RhZ80CAqd2ZXJzaW9uAQ==
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/krm
+
+==================================================================

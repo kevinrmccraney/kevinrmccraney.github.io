@@ -1,0 +1,10 @@
+---
+title: "🤦‍♂️ Bio"
+date: 2023-03-02
+template: about
+keywords: project, self-reflection
+---
+I've gotten several requests recently for a bio that captures my skills and abilities, so here's two. Clicking the tl;dr button will shorten it from ~75 to ~25 words. I also can do 200 characters
+
+>[Kevin McCraney](https://kevinmccraney.com) is a data engineer, educator, and consultant. He works with public sector & large-scale institutions building data processing infrastructure & improving data literacy. Kevin has several years of experience teaching & mentoring early career professionals as they transition to technology from non-STEM disciplines. Working predominantly with institutions in the Pacific Northwest, he enjoys professional opportunities where he can combine a humanistic worldview and technical acumen to solve complex sociotechnical problems.
+

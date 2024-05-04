@@ -6,9 +6,20 @@ import os
 cwd = os.getcwd()
 MD_DIR = "markdown/"
 
-def line_containing_pattern(markdown_content, pattern):
-    return re.sub(pattern, '', markdown_content, count=1, flags=re.DOTALL).strip()
+### ONE LINE FUNCTIONS
 
+# process text; args Text, Regex, Substitution string
+def choose_template(m): return f"{MD_DIR}/templates/{m.get('template', 'default')}.html"
+
+def process_text(t, r, s=""): return re.sub(r, s, t, count=1, flags=re.DOTALL).strip()
+
+def sub_tldr(t):
+    string = t
+    for regex in [r'&&(.*?)&&', r'&amp;&amp;(.*?)&amp;&amp;']:
+        string = process_text(string, regex, r'<span class="tldr">\1</span>')
+    return string
+
+def parse_markdown_to_html(markdown_txt): return markdown.markdown(markdown_txt)
 
 def parse_markdown_metadata(markdown_content):
     # Extract metadata from the Markdown content
@@ -22,14 +33,9 @@ def parse_markdown_metadata(markdown_content):
             key, value = map(str.strip, line.split(':', 1))
             metadata[key] = value
 
-        markdown_content = re.sub(re_str, '', markdown_content, count=1, flags=re.DOTALL).strip()
+        markdown_content = process_text(markdown_content, re_str)
 
     return metadata, markdown_content
-
-
-def choose_template(m): return f"{MD_DIR}/templates/{m.get('template', 'default')}.html"
-
-def parse_markdown_to_html(markdown_txt): return markdown.markdown(markdown_txt)
 
 def embed_into_template(data_dict, template_path):
     # Read the selected HTML template from a file
@@ -41,7 +47,7 @@ def embed_into_template(data_dict, template_path):
     # handle special case for index
     if data_dict["keywords"] == "index":
         html_string = r'<span style="float:left;"><a href="./index\.html">Back to Home</a></span>'
-        data = line_containing_pattern(data, html_string)
+        data = process_text(data, html_string)
 
     # Embed HTML content into the template
     return data
@@ -54,12 +60,20 @@ def process_files(input, directory):
 
         # Parse metadata to determine the template
         metadata, updated_markdown = parse_markdown_metadata(markdown_content)
-
+        print(updated_markdown)
+        print("-0-")
+        updated_markdown = sub_tldr(updated_markdown)
+        print(updated_markdown)
+        print("-0-")
         # Choose a template based on metadata
         template_path = choose_template(metadata)
 
         # Parse Markdown to HTML
         html_content = parse_markdown_to_html(updated_markdown)
+        print(html_content)
+        print("-0-")
+        html_content = sub_tldr(html_content)
+        print(html_content)
         metadata["content"] = html_content
 
         # Embed HTML content into the template

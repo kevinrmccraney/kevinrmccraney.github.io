@@ -7,7 +7,7 @@ keywords: education, curriculum-design, research
 ## 🤔 Problem Space
 During my time in graduate school, I participated in a multi-quarter research project focused on design for the Anthropocene.
 
-The research project was structured as a reading group. In the first half of the project, we would read an excerpt from a large text or a handful of papers on a theme, and then come together and talk through our takeaways.
+&&The research project was structured as a reading group. In the first half of the project, we would read an excerpt from a large text or a handful of papers on a theme, and then come together and talk through our takeaways.&&
 
 ## 🛠 Process
 Initially, I was curious about two overarching questions: is data, as an encoded artifact, materialized ideology; and has anyone ever calculated the energy consumption of performing basic office tasks?

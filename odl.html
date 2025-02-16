@@ -1,23 +1,48 @@
 <html>
-  <head>
-    <title>🌃 Open Data Literacy Internship: NLP on Public Records</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>🌃 Open Data Literacy Internship: NLP on Public Records</h1>
-        <h2>🤔 Problem Space</h2>
+    <head>
+        <title>🌃 Open Data Literacy Internship - NLP on Public Records</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>🌃 Open Data Literacy Internship - NLP on Public Records</h1>
+            <h2>🤔 Problem Space</h2>
 <p>For eight weeks in summer 2018, I worked for the City of Seattle and the State of Washington on an open data-related project. The scope of the internship was to support data literacy for people in the public sector.</p>
 <p>My partner and I collaborated on creating a governance document for an open data-related paraprofessional organization. In parallel, I spent time analyzing trends in public records requests to support proactive disclosure of datasets.</p>
 <p>The project had two parts: data analysis and a policy document. I was in charge of the data analysis.</p>
@@ -31,8 +56,13 @@ coded transcripts, which you can view <a href="https://github.com/OpenDataLitera
 <p>We traveled to Olympia to meet with some of the partners who helped facilitate the internship. We also presented our work for discussion, which you can see online.</p>
 <p>The final analysis that I produced is available on GitHub, hosted in an interactive Jupyter notebook with Binder. You can <a href="https://github.com/OpenDataLiteracy/OpenDataAlliance-KM/blob/master/NLP%20on%20PRR%20Visualizations.ipynb">try it here</a>.</p>
 <p>Throughout the project, we also wrote about our experience. You can <a href="https://medium.com/open-data-literacy/improving-user-experience-for-public-records-requests-be311e302b7a">view some reflections here</a>or <a href="https://medium.com/open-data-literacy/summarizing-a-summer-devoted-to-data-6cf7f68f29a1">here on Medium</a>.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            const detailTags = document.querySelectorAll("details");
+
+            detailTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

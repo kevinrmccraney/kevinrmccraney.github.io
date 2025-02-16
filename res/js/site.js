@@ -1,14 +1,20 @@
 function tldr() {
-  var x = document.getElementsByClassName("tldr");
+  var x = document.querySelectorAll('details');
   var b = document.getElementById("tldr-btn");
 
-  Array.prototype.forEach.call(x, function(el) {
-    // Do stuff here
-    if (el.style.display === "none") {
-      el.style.display = "block";
-      b.textContent="tl;dr";
-    } else {
-      el.style.display = "none";
-      b.textContent="tell me more";
-    }
-})};
+  // Toggle the button text based on the current state
+  if (b.textContent === "tell me more") {
+    b.textContent = "tl;dr";
+    Array.prototype.forEach.call(x, function (el) {
+      // Toggle the 'open' attribute on <details> tags
+      el.setAttribute("open", "");
+    });
+  } else {
+    b.textContent = "tell me more";
+    Array.prototype.forEach.call(x, function (el) {
+      // Toggle the 'open' attribute on <details> tags
+      el.removeAttribute("open");
+    });
+  }
+  
+}

@@ -1,27 +1,51 @@
 <html>
-  <head>
-    <title>👨‍🎓 Kevin McCraney</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="content">
-      <section class="controls">
-        
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-        <h1>👨‍🎓 Kevin McCraney</h1>
-        <p><a href="./img/me.png" title="Picture of me"><img class="img-circle" src="./img/me.png" width="250"/></a></p>
+    <head>
+        <title>👨‍🎓 Kevin McCraney</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>👨‍🎓 Kevin McCraney</h1>
+            <p><a href="./img/me.png" title="Picture of me"><img class="img-circle" src="./img/me.png" width="100"/></a></p>
 <h2>About Me</h2>
 <p>I am a graduate of the University of Washington's MSIM program, specializing in data science, user experience, and information architecture. If you'd like to hire me as a consultant, <a href="/hire-me.html">here are some of the things I can do</a>.</p>
-<p>I'm interested in music, teaching methods, the history of technology, community building, design, economics, and other such things. Here's my <a href="./bio.html">bio</a> and a <a href="./timeline.html">professional timeline</a>.</p>
-<p>I strive to make the oblique transparent and the abstract concrete. If that line sounds familiar, I might have used it on you in an interview or something. I identify as "personally introverted, professionally extroverted."</p>
+<p><details><summary>Here's my <a href="./bio.html">bio</a> and a <a href="./timeline.html">professional timeline</a>.</summary> I'm interested in music, teaching methods, the history of technology, community building, design, economics, and other such things.</p>
+<p>I strive to make the oblique transparent and the abstract concrete. If that line sounds familiar, I might have used it on you in an interview or something. I identify as "personally introverted, professionally extroverted."</details></p>
+<p>Get in touch at <a href="https://github.com/kevinrmccraney">GitHub</a> or <a href="mailto:moneys_tower_0g@icloud.com">via email</a>.</p>
 <h2>📚 Selected Projects</h2>
 <ul>
 <li><a href="./capstone.html">Capstone: IAC Data Model Project</a></li>
@@ -33,6 +57,7 @@
 <li><a href="./fish-count.html">Four Peaks: My Experience as a Professional Fish Counter</a></li>
 <li><a href="./students.html">Questions Students Ask</a></li>
 <li><a href="./troubled-worlds.html">Troubled Worlds Curriculum Design</a></li>
+<li><a href="./this-site.html">About this Site (and Personal Sites Generally)</a></li>
 </ul>
 <h2>📝 Lists</h2>
 <ul>
@@ -40,10 +65,15 @@
 <li><a href="./gear.html">Gear</a> I use to do various projects.</li>
 <li><a href="./colophon.html">Colophon</a></li>
 </ul>
-<h2>Links</h2>
-<p>Get in touch at <a href="https://github.com/kevinrmccraney">GitHub</a> or <a href="mailto:moneys_tower_0g@icloud.com">via email</a>.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            // Select all <details> elements
+            const detailsTags = document.querySelectorAll("details");
+
+            // Loop through each <details> and set the 'open' attribute
+            detailsTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

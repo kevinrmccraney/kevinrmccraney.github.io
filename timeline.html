@@ -1,54 +1,85 @@
 <html>
-  <head>
-    <title>📅 Professional Timeline</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>📅 Professional Timeline</h1>
-        <h2>🤔 Problem Space</h2>
-<p>When I was browsing the web relatively recently, I found <a href="https://www.shantini.co/posts/how-i-got-into-tech/">Shantini Vyas's website</a>, which talks about how she ended up in her current career working for Apple.</p>
-<p>Many of my students and mentees at the University of Washington ask what it's like to transition from an explicitly non-tech career to being a programmer or data scientist full time, so I figured I would put something similar together.</p>
+    <head>
+        <title>📅 Professional Timeline</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>📅 Professional Timeline</h1>
+            <h2>🤔 Problem Space</h2>
+<p><details>
+<summary>Many of my students and mentees at the University of Washington ask what it's like to transition from an explicitly non-tech career to being a programmer or data scientist full time, so I figured I would put something similar together.</summary><br></p>
+<p>When I was browsing the web relatively recently, I found <a href="https://www.shantini.co/posts/how-i-got-into-tech/">Shantini Vyas's website</a>, which talks about how she ended up in her current career working for Apple. This page is very much inspired by her work. The most formative experiences are visible when you engage the tl;dr button.</details></p>
 <h2>🛠 Process</h2>
-<h4>2007-2011</h4>
-<p>Studied at The Ohio State University; lived as a freegan for most of this time, and sold thrifted things online. Studied computer music under Mark Ainger, which was maybe my first exposure to serious programming in Max/MSP/Jitter.</p>
-<h4>2012</h4>
-<p>Worked as librarian/professional tutor; volunteered for ESL teaching; started exploring generative code and design using Processing</p>
-<h4>2013</h4>
-<p>Taught English in China; began self-study in data science and programming</p>
-<h4>2014</h4>
-<p>Returned from China; worked as professional tutor; continued self-study in data science and programming</p>
-<h4>2015-2017</h4>
-<p>Worked at UNC in the business school producing coursework; did some simple web programming &amp; maintenance/data analysis as part of job</p>
-<h4>June 2017</h4>
-<p>Quit job; moved to Seattle</p>
-<h4>September 2017</h4>
-<p>Enrolled in graduate school; Masters of Science in Information Management. Won a graduate fellowship to work in the Foreign Service through the Foreign Affairs Information Technology program but declined it to try my hand at the tech industry and stay in one place for a while</p>
-<h4>Summer 2018</h4>
-<p><a href="./odl.html">Open Data Literacy Internship</a> with City of Seattle and State of Washington, where I generated embeddings and modeled topics in public records</p>
-<h4>Autumn 2018 - Spring 2019</h4>
-<p>Data Modeling &amp; User Research for <a href="./capstone.html">IAC Data Model Project</a>; I probably talk about this project the most in interviews</p>
-<h4>Spring 2019</h4>
-<p>Graduated from MSIM; applied to (likely) thousands of jobs on the internet, trying to decide between a career in quantitative user experience research and data science straight-up; got offered some insultingly low salaries as a data analyst as part of this journey (&lt;$30k in downtown Seattle)</p>
-<h4>September 2019 - October 2022</h4>
-<p>Data Engineer at Four Peaks Environmental Science and Data Solutions, where I did all kinds of stuff and learned rapidly about technical work but also having a customer-focused mindset</p>
-<h4>October 2022 - Present</h4>
-<p>Data Engineer at Bold Penguin, where I maintained data pipelines for systems that process PDFs with computer vision, ingest data into a database, etc.</p>
+<p><details><summary>
+<strong>2007-2011</strong> Studied at The Ohio State University; lived as a freegan for most of this time, and sold thrifted things online. Studied computer music under Mark Ainger, which was maybe my first exposure to serious programming in Max/MSP/Jitter.</summary></p>
+<p><strong>2012</strong> Worked as librarian/professional tutor; volunteered for ESL teaching; started exploring generative code and design using Processing
+</details></p>
+<p><details><summary>
+<strong>2013</strong> Taught English in China; began self-study in data science and programming
+</summary></p>
+<p><strong>2014</strong> Returned from China; worked as professional tutor; continued self-study in data science and programming</p>
+<p><strong>2015-2017</strong> Worked at UNC in the business school producing coursework; did some simple web programming &amp; maintenance/data analysis as part of job</p>
+<p><strong>June 2017</strong> Quit job; moved to Seattle
+</details></p>
+<p><details><summary>
+<strong>September 2017</strong> Enrolled in graduate school; Masters of Science in Information Management. Won a graduate fellowship to work in the Foreign Service through the Foreign Affairs Information Technology program but declined it to try my hand at the tech industry and stay in one place for a while
+</summary></p>
+<p><strong>Summer 2018</strong> <a href="./odl.html">Open Data Literacy Internship</a> with City of Seattle and State of Washington, where I generated embeddings and modeled topics in public records</p>
+<p><strong>Autumn 2018 - Spring 2019</strong> Data Modeling &amp; User Research for <a href="./capstone.html">IAC Data Model Project</a>; I probably talk about this project the most in interviews</p>
+<p><strong>Spring 2019</strong> Graduated from MSIM; applied to (likely) thousands of jobs on the internet, trying to decide between a career in quantitative user experience research and data science straight-up; got offered some insultingly low salaries as a data analyst as part of this journey (&lt;$30k in downtown Seattle)
+</details></p>
+<p><details><summary>
+<strong>September 2019 - October 2022</strong> Data Engineer at Four Peaks Environmental Science and Data Solutions, where I did all kinds of stuff and learned rapidly about technical work but also having a customer-focused mindset
+</summary></details></p>
+<p><strong>October 2022 - Present</strong> Data Engineer at Bold Penguin, where I maintained data pipelines for systems that process PDFs with computer vision, ingest data into a database, etc.</p>
 <h2>🎉 Outcomes</h2>
 <p>I still run into questions I'm not sure how to answer professionally, and put in lots of effort to self-study and learn new things.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            // Select all <details> elements
+            const detailsTags = document.querySelectorAll("details");
+
+            // Loop through each <details> and set the 'open' attribute
+            detailsTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

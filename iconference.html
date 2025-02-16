@@ -1,23 +1,48 @@
 <html>
-  <head>
-    <title>🎓 2015 iConference Video Contest</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>🎓 2015 iConference Video Contest</h1>
-        <h2>🎬 Video</h2>
+    <head>
+        <title>🎓 2015 iConference Video Contest</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>🎓 2015 iConference Video Contest</h1>
+            <h2>🎬 Video</h2>
 <iframe src="https://player.vimeo.com/video/147389407" width="480" height="270" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
 
 <h2>🤔 Problem Space</h2>
@@ -31,8 +56,13 @@
 <p>I also made the background music to accompany and score the video using an analog synthesizer I had at the time.</p>
 <p>I initially wrote the music and did sound design for the video in Ableton Live and recorded the voiceovers and other cues alongside the video using my synth.</p>
 <p>It took me about two weeks (from conceptualization to finalized script) to complete this video. I did it during evenings and a couple of weekends while working full-time.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            const detailTags = document.querySelectorAll("details");
+
+            detailTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

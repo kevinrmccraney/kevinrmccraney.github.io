@@ -1,28 +1,60 @@
 <html>
-  <head>
-    <title>"🤦‍♂️ Bio"</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>"🤦‍♂️ Bio"</h1>
-        <p>I've gotten several requests recently for a bio that captures my skills and abilities, so here's two. Clicking the tl;dr button will shorten it from ~75 to ~25 words. The 25-word bio is also less than 200 characters.</p>
+    <head>
+        <title>"🤦‍♂️ Bio"</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>"🤦‍♂️ Bio"</h1>
+            <p>I've gotten several requests recently for a bio that captures my skills and abilities, so here's two. Clicking the tl;dr button will shorten it from ~75 to ~25 words. The 25-word bio is also less than 200 characters.</p>
 <blockquote>
-<p><a href="https://kevinmccraney.com">Kevin McCraney</a> is a data engineer, educator, and consultant. He works with public sector &amp; large-scale institutions building data processing infrastructure &amp; improving data literacy. <span class="tldr"> Kevin has several years of experience teaching &amp; mentoring early career professionals as they transition to technology from non-STEM disciplines. Working predominantly with institutions in the Pacific Northwest, he enjoys professional opportunities where he can combine a humanistic worldview and technical acumen to solve complex sociotechnical problems. </span></p>
+<p><details><summary>Kevin McCraney is a data engineer, educator, and consultant. He works with public sector &amp; large-scale institutions building data processing infrastructure &amp; improving data literacy.</summary><br>Kevin has several years of experience teaching &amp; mentoring early career professionals as they transition to technology from non-STEM disciplines. Working predominantly with institutions in the Pacific Northwest, he enjoys professional opportunities where he can combine a humanistic worldview and technical acumen to solve complex sociotechnical problems. </details></p>
 </blockquote>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            // Select all <details> elements
+            const detailsTags = document.querySelectorAll("details");
+
+            // Loop through each <details> and set the 'open' attribute
+            detailsTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

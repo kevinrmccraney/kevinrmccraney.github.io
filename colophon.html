@@ -1,23 +1,48 @@
 <html>
-  <head>
-    <title>Colophon</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>Colophon</h1>
-        <h2>🤔 What is a colophon?</h2>
+    <head>
+        <title>Colophon</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>Colophon</h1>
+            <h2>🤔 What is a colophon?</h2>
 <p>A colophon is essentially a statement containing the information about the publication of a text.</p>
 <p>I used to see blogs that shared this information, but never knew what it meant--they usually documented their choice of typography and other stuff, which seemed weird and irrelevant to me. We're in the age of hypertext and the process behind writing has changed significantly, so why refer back to old forms?</p>
 <p>To reimagine what a colophon does, I'll cite all of the sites that inspired the design of this one. The more influential sites are stacked toward the top.</p>
@@ -47,8 +72,15 @@
 <li><a href="http://jotted.io">jotted.io</a></li>
 <li><a href="https://github.com/emilwallner/Emil-Wallner-LinkedIn">emilwallner github</a></li>
 </ul>
-    </section>
-    <script>
-    </script>
-  </body>
+        </section>
+        <script>
+            // Select all <details> elements
+            const detailsTags = document.querySelectorAll("details");
+
+            // Loop through each <details> and set the 'open' attribute
+            detailsTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

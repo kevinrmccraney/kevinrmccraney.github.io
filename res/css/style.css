@@ -1,5 +1,5 @@
 body {
-    font-family: 'Source Sans Pro', sans-serif;
+    font-family: "Source Sans Pro", sans-serif;
 }
 ul {
     list-style-type: none;
@@ -30,7 +30,7 @@ blockquote blockquote {
     margin: 0;
     padding: 0;
 }
-img{
+img {
     max-width: 100%;
     height: auto;
     display: block;
@@ -43,7 +43,8 @@ img{
     margin-bottom: 40px;
     font-size: 1.125em;
     font-weight: bold;
-    font-family: -apple-system, BlinkMacSystemFont, 'Source Sans Pro', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Source Sans Pro",
+        sans-serif;
 }
 .section {
     margin-bottom: 30px;
@@ -54,11 +55,11 @@ img{
     margin: auto;
 }
 .img-circle {
-  border-radius:  50%;
-  width: 30%;
-  height: auto;
-  float: right;
-  border: 1px solid;
+    border-radius: 50%;
+    width: 30%;
+    height: auto;
+    float: right;
+    border: 1px solid;
 }
 
 /* Landscape phones and down */
@@ -89,11 +90,47 @@ img{
     }
 }
 
+details {
+    display: inline;
+    padding: 0;
+}
+details > summary {
+    display: inline;
+    padding: 0;
+}
+details > summary::-webkit-details-marker {
+    /* to remove triangle */
+    display: inline;
+    display: none;
+}
+
 /* Portrait tablet to landscape and desktop */
-@media (min-width: 768px) and (max-width: 979px) {}
+@media (min-width: 768px) and (max-width: 979px) {
+}
 
 /* Large desktop */
-@media (min-width: 1200px) {}
+@media (min-width: 1200px) {
+}
 
 /* Very large desktop */
-@media (min-width: 1600px) {}
+@media (min-width: 1600px) {
+}
+
+#tooltip {
+    display: none;
+    position: absolute;
+    width: 150px;
+    font-size: 14px;
+    background-color: lightgreen;
+    padding: 5px;
+    border-radius: 5px;
+    white-space: nowrap;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    top: -40px; /* Position above the button */
+}
+span button:hover + #tooltip {
+    display: block;
+}

@@ -1,23 +1,48 @@
 <html>
-  <head>
-    <title>📊 Capstone: IAC Data Model</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>📊 Capstone: IAC Data Model</h1>
-        <h2>🎬 Video</h2>
+    <head>
+        <title>📊 Capstone - IAC Data Model</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>📊 Capstone - IAC Data Model</h1>
+            <h2>🎬 Video</h2>
 <iframe width="560" height="315"
 src="https://www.youtube.com/embed/CHX1ZGw5k_o" 
 frameborder="0" 
@@ -25,29 +50,50 @@ allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 allowfullscreen></iframe>
 
 <h2>🤔 Problem Space</h2>
-<p>Homelessness is a serious issue in Seattle, so much so that it has gotten national attention. It's also highly contentious; everyone everywhere has an opinion about it, and how the government is (or isn't; or could; or should) be handling things.</p>
-<p>The City of Seattle Human Services Department (HSD) contracts with community organizations to provide housing &amp; health services to people experiencing homelessness. This program &amp; contract data describes the resources each organization gets and the populations it serves.</p>
-<p>Before this project, Human Services staff pieced together program &amp; contract data from many sources. This is a time-consuming and frustrating process, but this information is critical for informing policy and highly visible through media outreach. The City needed a system to capture institutional knowledge, automate data ingest, and makes data analysis more streamlined and trustworthy. My team, the Rolling Capstones, sought to provide this solution to the City. We partnered with <strong>Amazon Web Services (AWS)</strong> and <strong>Tableau</strong> for this work. The partners offered us strategic guidance and access to tools, but we did the work ourselves.</p>
+<p><details>
+<summary>The City of Seattle Human Services Department (HSD) contracts with community organizations to provide housing &amp; health services to people experiencing homelessness. This program &amp; contract data describes the resources each organization gets and the populations it serves. My team built a data solution which addresses a major information need for the department, loading data into a centralized repository for easier monitoring and analysis.</summary><br></p>
+<p>Homelessness is, of course, a serious issue in Seattle, so much so that it has gotten national attention. It's also highly contentious; everyone everywhere has an opinion about it, and how the government is (or isn't; or could; or should) be handling things.</p>
+<p>Before this project, Human Services staff pieced together program &amp; contract data from many sources. This is a time-consuming and frustrating process, but this information is critical for informing policy and highly visible through media outreach. The City needed a system to capture institutional knowledge, automate data ingest, and makes data analysis more streamlined and trustworthy. My team, the Rolling Capstones, sought to provide this solution to the City. We partnered with <strong>Amazon Web Services (AWS)</strong> and <strong>Tableau</strong> for this work. The partners offered us strategic guidance and access to tools, but we did the work ourselves.
+</details></p>
 <h2>📝 Initial Planning</h2>
-<p>This project was around six months of work, with approximately one month of up-front planning and five months of execution. We initially scoped it across four phases.</p>
+<p><details>
+<summary>
+This project was around six months of work, with approximately one month of up-front planning and five months of execution. We initially scoped it across four phases, and adapted it with additional detail.</summary><br></p>
 <p><img alt="Project timeline" src="./img/capstone-1.png" title="The project timeline" /></p>
-<p>When we added more detail, it became evident that each of these phases would not have the same amount of time devoted to it, and that they might run concurrently.</p>
-<p><img alt="Project plan" src="./img/capstone-2.png" title="The project plan" /></p>
+<p>At a certain point in the project planning process, it became evident that each of these phases would not have the same amount of time devoted to it, and that they might run concurrently.</p>
+<p><img alt="Project plan" src="./img/capstone-2.png" title="The project plan" />
+</details></p>
 <h2>🎨 Design</h2>
-<p>To learn about the problem space, we interviewed several domain experts. We analyzed the major themes that emerged from our interviews and used the insights to inform the way we display information and our approach to the project.</p>
+<p><details>
+<summary>
+To learn about the problem space, we interviewed several domain experts. We analyzed the major themes that emerged from our interviews and used the insights to inform the way we display information and our approach to the project. We collaborated with people at the city for domain expertise and outside institutions for project planning support and strategy.
+</summary><br></p>
 <p>It was important for us to involve different stakeholders in our design process. AWS hosted a "Working Backwards" workshop to help flesh out user requirements. Working Backwards is their outcome-focused method for product development, and thinking of the solution we would build for City staff with the outcome in mind was a great exercise in level-setting for the project.</p>
-<p>Tableau collaborated with us on the design strategy for the reporting dashboards by providing guidance and training. We went through several iterations of data warehouse development before producing the final SSIS package ready for production. Most importantly, we tested and sought feedback at every stage of the process to make sure we were understanding things correctly.</p>
+<p>Tableau collaborated with us on the design strategy for the reporting dashboards by providing guidance and training. We went through several iterations of data warehouse development before producing the final SSIS package ready for production. Most importantly, we tested and sought feedback at every stage of the process to make sure we were understanding things correctly.
+</details></p>
 <h2>💪 Work</h2>
-<p>We knew we had to build some means to clean, structure, and ingest data. Our ETL pipeline consisted of a series of scripts written in Microsoft SQL Server. A job on the server watches a folder to see if new files need to be uploaded to the database. After ingest, the data is validated for proper typing and then brought from staging into production.</p>
+<p><details>
+<summary>
+We knew we had to build some means to clean, structure, and ingest data. Our ETL pipeline consisted of a series of scripts written in Microsoft SQL Server. A job on the server watches a folder to see if new files need to be uploaded to the database. After ingest, the data is validated for proper typing and then brought from staging into production.</summary><br></p>
 <p>We took the existing system for reporting (a Tableau dashboard) and shifted much of the logic that lived in calculated fields into the database itself. That way, users have to worry less about the validation of data, and can try out more interesting analyses.</p>
 <p>Here's an example of what the dashboard looks like, populated with dummy data:</p>
-<p><img alt="Example dashboard" src="./img/capstone-3.png" title="Example dashboard" /></p>
+<p><img alt="Example dashboard" src="./img/capstone-3.png" title="Example dashboard" />
+</details></p>
 <h2>🕰 Future Work &amp; Outcomes</h2>
-<p>Our hope is that our solution can help HSD tell a more complete story about how the City is serving its most vulnerable populations. Part of this work means taking a look at the current state of things at the city in addition to our technical tools.</p>
+<p><details>
+<summary>
+Our hope is that our solution can help HSD tell a more complete story about how the City is serving its most vulnerable populations.
+</summary><br></p>
 <p>Throughout our project, we audited business processes to better understand where later improvements could be made. Broadly, these consist of improvements for personnel training/job duties and technical architecture. We hope the City takes some of these ideas into consideration when they start to build out version 2.0 of our system.</p>
-<p>I was <a href="https://ischool.uw.edu/news/2019/05/msim-students-help-seattle-better-serve-homeless-people">interviewed</a> about this project, <a href="https://ischool.uw.edu/news/2019/06/capstone-puts-students-skills-display">won Best in Class</a> on project presentation night, and got a thank you note from the Mayor herself. My colleague <a href="https://www.tkku.me/#/city-of-seattle/">Tiffany Ku</a> documented her perspective on the project as well.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+<p>I was <a href="https://ischool.uw.edu/news/2019/05/msim-students-help-seattle-better-serve-homeless-people">interviewed</a> about this project, <a href="https://ischool.uw.edu/news/2019/06/capstone-puts-students-skills-display">won Best in Class</a> on project presentation night, and got a thank you note from the Mayor herself. My colleague <a href="https://www.tkku.me/#/city-of-seattle/">Tiffany Ku</a> documented her perspective on the project as well.
+</details></p>
+        </section>
+        <script>
+            const detailTags = document.querySelectorAll("details");
+
+            detailTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

@@ -1,6 +1,6 @@
 <html>
     <head>
-        <title>⏳ Now</title>
+        <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <meta
@@ -22,9 +22,11 @@
     <body>
         <section class="content">
             <section class="controls">
-                <span style="float: left"
-                    ><a href="./index.html">Back to Home</a></span
-                >
+                <x-placeholder>
+                    <span style="float: left"
+                        ><a href="./index.html">Back to Home</a></span
+                    >
+                </x-placeholder>
                 <span style="float: right">
                     <button
                         href="#"
@@ -41,17 +43,8 @@
                     </div>
                 </span>
             </section>
-            <h1>⏳ Now</h1>
-            <h2>🤔 What's up?</h2>
-<ul>
-<li>Starting a new job (teaching starts up again soon)</li>
-<li>KonMari method and mise-en-place for my office</li>
-<li>Designing a photography book</li>
-<li>Designing vinyl record packaging for my college band</li>
-<li>Trying to find a new gym where I can do swim &amp; sauna</li>
-<li>Starting a record listening club</li>
-</ul>
-<p>If you want to chat about any of these things, email me!</p>
+            <h1>{title}</h1>
+            {content}
         </section>
         <script>
             // Select all <details> elements

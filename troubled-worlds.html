@@ -1,33 +1,65 @@
 <html>
-  <head>
-    <title>🌃 Troubled Worlds Curriculum Design</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <meta name="description" content="Kevin McCraney, Data Science and UX Professional">
-    <meta name="ROBOTS" content="INDEX,FOLLOW">
-    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900" rel="stylesheet">
-    <link href="./res/css/style.css" rel="stylesheet">
-    <script src="./res/js/site.js"></script>
-  </head>
-  <body>
-    <section class="controls">
-        <span style="float:left;"><a href="./index.html">Back to Home</a></span>
-        <span style="float:right;"><button href="#" id="tldr-btn" onclick="tldr()">tl;dr</button></span>
-    </section>
-    <section class="content">
-        <h1>🌃 Troubled Worlds Curriculum Design</h1>
-        <h2>🤔 Problem Space</h2>
-<p>During my time in graduate school, I participated in a multi-quarter research project focused on design for the Anthropocene.</p>
-<p>The research project was structured as a reading group. In the first half of the project, we would read an excerpt from a large text or a handful of papers on a theme, and then come together and talk through our takeaways.</p>
+    <head>
+        <title>🌃 Troubled Worlds Curriculum Design</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <meta
+            name="description"
+            content="Kevin McCraney, Data Science and UX Professional"
+        />
+        <meta name="ROBOTS" content="INDEX,FOLLOW" />
+        <link
+            href="https://afeld.github.io/emoji-css/emoji.css"
+            rel="stylesheet"
+        />
+        <link
+            href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,900"
+            rel="stylesheet"
+        />
+        <link href="./res/css/style.css" rel="stylesheet" />
+        <script src="./res/js/site.js"></script>
+    </head>
+    <body>
+        <section class="content">
+            <section class="controls">
+                <span style="float: left"
+                    ><a href="./index.html">Back to Home</a></span
+                >
+                <span style="float: right">
+                    <button
+                        href="#"
+                        id="tldr-btn"
+                        onclick="tldr()"
+                        onmouseover="this.style.cursor='help'"
+                        onmouseout="this.style.cursor='default'"
+                    >
+                        tl;dr
+                    </button>
+                    <div id="tooltip">
+                        Click to summarize. It doesn't work on every page...
+                        some are short enough!
+                    </div>
+                </span>
+            </section>
+            <h1>🌃 Troubled Worlds Curriculum Design</h1>
+            <h2>🤔 Problem Space</h2>
+<p><details><summary>During my time in graduate school, I participated in a multi-quarter research project focused on design for the Anthropocene.</summary><br></p>
+<p>The research project was structured as a reading group. In the first half of the project, we would read an excerpt from a large text or a handful of papers on a theme, and then come together and talk through our takeaways.</details></p>
 <h2>🛠 Process</h2>
-<p>Initially, I was curious about two overarching questions: is data, as an encoded artifact, materialized ideology; and has anyone ever calculated the energy consumption of performing basic office tasks?</p>
-<p>When the research project was running, it was my duty to introduce these ideas to other folks by leading a discussion section focused on these topics.</p>
+<p><details><summary>Initially, I was curious about two overarching questions: is data, as an encoded artifact, materialized ideology; and has anyone ever calculated the energy consumption of performing basic office tasks using a computer?</summary><br></p>
+<p>Ultimately this led me into doing research about the nature of calculating/computing/documenting information using <a href="https://news.mit.edu/2018/book-statistical-arguments-public-debate-0205">calculated values</a> via the book of the same name, as well as various projects focused on low-resource computing.</p>
+<p>When the research project was running, it was my duty to introduce these ideas to other folks by leading a discussion section focused on these topics. We met on a weekly basis and we had to lead discussion sessions focused on the research we had done in the previous week.</details></p>
 <h2>🎉 Outcomes</h2>
-<p>The outcome of the project was an undergraduate curriculum focused on some of the different emergent themes of the group--situated design, adaptation to the environment, energy consumption, supply chains, and repair.</p>
-<p>I concluded my participation in the group by writing a module on power consumption for the syllabus we produced. You can view <a href="https://doi.org/10.24242/jclis.v3i1.137">our published curriculum here</a>.</p>
-    </section>
-    <script>
-    </script>
-  </body>
+<p><details><summary>I concluded my participation in the group by writing a module on power consumption for the syllabus we produced. You can view <a href="https://doi.org/10.24242/jclis.v3i1.137">our published curriculum here</a>.</summary><br></p>
+<p>The outcome of the project was an undergraduate curriculum focused on some of the different emergent themes of the group--situated design, adaptation to the environment, energy consumption, supply chains, and repair.
+</details></p>
+        </section>
+        <script>
+            const detailTags = document.querySelectorAll("details");
+
+            detailTags.forEach((detail) => {
+                detail.setAttribute("open", "");
+            });
+        </script>
+    </body>
 </html>

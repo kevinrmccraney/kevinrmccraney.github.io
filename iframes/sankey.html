@@ -10,23 +10,22 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #ffffff;
+  --bg: transparent;
   --text: #2a2a28;
   --muted: #7a7a76;
 }
 
 body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   background: transparent;
   color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
 .controls {
   display: flex;
   gap: 8px;
-  padding: 8px;
+  padding: 10px;
   align-items: center;
-  flex-wrap: wrap;
 }
 
 .tog {
@@ -38,17 +37,18 @@ body {
   background: #f5f5f3;
 }
 
-svg {
-  width: 100%;
-}
 .tooltip {
   position: fixed;
+  pointer-events: none; /* FIXES JITTER */
   background: white;
   border: 1px solid #ccc;
+  border-radius: 6px;
   padding: 6px 10px;
   font-size: 12px;
   display: none;
 }
+
+svg { width: 100%; }
 </style>
 </head>
 
@@ -68,99 +68,123 @@ svg {
 
 <script>
 
-// ---------------- DATA ----------------
 const YEARS = [2021,2022,2023,2024,2025];
 
 const DATA = {
-  applied: {2021:164,2022:304,2023:322,2024:344,2025:344},
-  hm:      {2021:7,2022:6,2023:9,2024:6,2025:10},
-  panel:   {2021:2,2022:3,2023:5,2024:3,2025:5},
-  accepted:{2021:0,2022:1,2023:0,2024:0,2025:0},
-  withdrawn:{2021:1,2022:2,2023:0,2024:0,2025:0}
+  app:{2021:164,2022:304,2023:322,2024:344,2025:344},
+  hm:{2021:7,2022:6,2023:9,2024:6,2025:10},
+  panel:{2021:2,2022:3,2023:5,2024:3,2025:5},
+  acc:{2021:0,2022:1,2023:0,2024:0,2025:0},
+  w:{2021:1,2022:2,2023:0,2024:0,2025:0}
 };
 
 const COLORS = {
-  applied:"#378ADD",
+  app:"#378ADD",
   hm:"#7F77DD",
   panel:"#1D9E75",
-  accepted:"#639922",
-  withdrawn:"#C47A3A"
+  acc:"#639922",
+  w:"#C47A3A"
 };
 
-// ---------------- LAYOUT ----------------
 const svg = d3.select("#chart");
 const tooltip = document.getElementById("tooltip");
 
 let visible = new Set(YEARS.map(String));
 
-function draw() {
+function ribbon(x1,y1,y1b,x2,y2,y2b){
+  const mx=(x1+x2)/2;
+  return `M${x1},${y1}
+          C${mx},${y1} ${mx},${y2} ${x2},${y2}
+          L${x2},${y2b}
+          C${mx},${y2b} ${mx},${y1b} ${x1},${y1b} Z`;
+}
 
-  const width = document.body.clientWidth;
-  const height = 420;
+function draw(){
 
-  svg.attr("viewBox",`0 0 ${width} ${height}`);
+  const W = document.body.clientWidth;
+  const H = 420;
+
+  svg.attr("viewBox",`0 0 ${W} ${H}`);
 
   svg.selectAll("*").remove();
 
-  const stageX = [
-    80,          // Applied
-    width*0.3,   // HM
-    width*0.5,   // Panel
-    width*0.75,  // Accepted
-    width*0.9    // Withdrawn
-  ];
+  const x = {
+    app: 80,
+    hm: W*0.3,
+    panel: W*0.5,
+    acc: W*0.75,
+    w: W*0.9
+  };
 
-  const max = Math.max(...Object.values(DATA.applied));
-  const scale = v => (v/max)*(height-80);
+  const max = Math.max(...Object.values(DATA.app));
 
-  YEARS.forEach((year,i)=>{
+  function scale(v){
+    return (v/max)*(H-80);
+  }
 
-    if(!visible.has(String(year))) return;
+  YEARS.forEach((yr,i)=>{
 
-    const offset = (i-2)*4;
+    if(!visible.has(String(yr))) return;
 
-    const vals = {
-      applied: DATA.applied[year],
-      hm: DATA.hm[year],
-      panel: DATA.panel[year],
-      accepted: DATA.accepted[year],
-      withdrawn: DATA.withdrawn[year]
+    const offset = (i-2)*3;
+
+    const v = {
+      app:DATA.app[yr],
+      hm:DATA.hm[yr],
+      panel:DATA.panel[yr],
+      acc:DATA.acc[yr],
+      w:DATA.w[yr]
     };
 
-    const nodes = [
-      {k:"applied", x:stageX[0]},
-      {k:"hm", x:stageX[1]},
-      {k:"panel", x:stageX[2]},
-      {k:"accepted", x:stageX[3]},
-      {k:"withdrawn", x:stageX[4]}
-    ];
+    const pos={};
 
-    nodes.forEach(n=>{
-      const h = scale(vals[n.k]);
-      const y = height - h - 40;
+    Object.keys(v).forEach(k=>{
+      const h = scale(v[k]);
+      const y = H - h - 40;
+      pos[k]={x:x[k]+offset,y,h};
+    });
 
+    function flow(a,b,color){
+      if(v[a]===0||v[b]===0) return;
+
+      svg.append("path")
+        .attr("d", ribbon(
+          pos[a].x+8, pos[a].y, pos[a].y+pos[a].h,
+          pos[b].x-8, pos[b].y, pos[b].y+pos[b].h
+        ))
+        .attr("fill",color)
+        .attr("opacity",0.15);
+    }
+
+    flow("app","hm",COLORS.app);
+    flow("hm","panel",COLORS.hm);
+    flow("panel","acc",COLORS.panel);
+    flow("hm","w",COLORS.w);
+    flow("panel","w",COLORS.w);
+
+    Object.keys(pos).forEach(k=>{
       svg.append("rect")
-        .attr("x", n.x + offset - 8)
-        .attr("y", y)
-        .attr("width", 16)
-        .attr("height", h)
-        .attr("fill", COLORS[n.k])
-        .attr("opacity",0.6)
+        .attr("x",pos[k].x-8)
+        .attr("y",pos[k].y)
+        .attr("width",16)
+        .attr("height",pos[k].h)
+        .attr("fill",COLORS[k])
+        .attr("opacity",0.7)
         .on("mousemove",(e)=>{
           tooltip.style.display="block";
-          tooltip.innerHTML = `<b>${year} ${n.k}</b>: ${vals[n.k]}`;
-          tooltip.style.left = e.clientX+10+"px";
-          tooltip.style.top = e.clientY-20+"px";
+          tooltip.innerHTML=`<b>${yr} ${k}</b>: ${v[k]}`;
+          tooltip.style.left=e.clientX+10+"px";
+          tooltip.style.top=e.clientY-20+"px";
         })
         .on("mouseleave",()=>tooltip.style.display="none");
     });
 
   });
 
-  // labels
   ["Applied","HM","Panel","Accepted","Withdrawn"].forEach((t,i)=>{
+    const keys=["app","hm","panel","acc","w"];
     svg.append("text")
-      .attr("x",stageX[i])
+      .attr("x",x[keys[i]])
       .attr("y",20)
       .attr("text-anchor","middle")
       .attr("font-size",11)
@@ -169,17 +193,11 @@ function draw() {
 
 }
 
-// toggle buttons
 document.querySelectorAll(".tog").forEach(btn=>{
-  btn.onclick = ()=>{
-    const y = btn.dataset.y;
-    if(visible.has(y)){
-      visible.delete(y);
-      btn.style.opacity = 0.3;
-    } else {
-      visible.add(y);
-      btn.style.opacity = 1;
-    }
+  btn.onclick=()=>{
+    const y=btn.dataset.y;
+    if(visible.has(y)){visible.delete(y);btn.style.opacity=0.3;}
+    else{visible.add(y);btn.style.opacity=1;}
     draw();
   };
 });
@@ -187,6 +205,5 @@ document.querySelectorAll(".tog").forEach(btn=>{
 draw();
 
 </script>
-
 </body>
 </html>

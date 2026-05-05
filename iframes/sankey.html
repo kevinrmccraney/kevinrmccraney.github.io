@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Funnel Overlay</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #ffffff;
+  --text: #2a2a28;
+  --muted: #7a7a76;
+}
+
+body {
+  background: transparent;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.tog {
+  font-size: 11px;
+  padding: 3px 9px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  background: #f5f5f3;
+}
+
+svg {
+  width: 100%;
+}
+.tooltip {
+  position: fixed;
+  background: white;
+  border: 1px solid #ccc;
+  padding: 6px 10px;
+  font-size: 12px;
+  display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="controls">
+  Toggle year
+  <button class="tog on" data-y="2021">2021</button>
+  <button class="tog on" data-y="2022">2022</button>
+  <button class="tog on" data-y="2023">2023</button>
+  <button class="tog on" data-y="2024">2024</button>
+  <button class="tog on" data-y="2025">2025</button>
+</div>
+
+<svg id="chart"></svg>
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+
+// ---------------- DATA ----------------
+const YEARS = [2021,2022,2023,2024,2025];
+
+const DATA = {
+  applied: {2021:164,2022:304,2023:322,2024:344,2025:344},
+  hm:      {2021:7,2022:6,2023:9,2024:6,2025:10},
+  panel:   {2021:2,2022:3,2023:5,2024:3,2025:5},
+  accepted:{2021:0,2022:1,2023:0,2024:0,2025:0},
+  withdrawn:{2021:1,2022:2,2023:0,2024:0,2025:0}
+};
+
+const COLORS = {
+  applied:"#378ADD",
+  hm:"#7F77DD",
+  panel:"#1D9E75",
+  accepted:"#639922",
+  withdrawn:"#C47A3A"
+};
+
+// ---------------- LAYOUT ----------------
+const svg = d3.select("#chart");
+const tooltip = document.getElementById("tooltip");
+
+let visible = new Set(YEARS.map(String));
+
+function draw() {
+
+  const width = document.body.clientWidth;
+  const height = 420;
+
+  svg.attr("viewBox",`0 0 ${width} ${height}`);
+
+  svg.selectAll("*").remove();
+
+  const stageX = [
+    80,          // Applied
+    width*0.3,   // HM
+    width*0.5,   // Panel
+    width*0.75,  // Accepted
+    width*0.9    // Withdrawn
+  ];
+
+  const max = Math.max(...Object.values(DATA.applied));
+  const scale = v => (v/max)*(height-80);
+
+  YEARS.forEach((year,i)=>{
+
+    if(!visible.has(String(year))) return;
+
+    const offset = (i-2)*4;
+
+    const vals = {
+      applied: DATA.applied[year],
+      hm: DATA.hm[year],
+      panel: DATA.panel[year],
+      accepted: DATA.accepted[year],
+      withdrawn: DATA.withdrawn[year]
+    };
+
+    const nodes = [
+      {k:"applied", x:stageX[0]},
+      {k:"hm", x:stageX[1]},
+      {k:"panel", x:stageX[2]},
+      {k:"accepted", x:stageX[3]},
+      {k:"withdrawn", x:stageX[4]}
+    ];
+
+    nodes.forEach(n=>{
+      const h = scale(vals[n.k]);
+      const y = height - h - 40;
+
+      svg.append("rect")
+        .attr("x", n.x + offset - 8)
+        .attr("y", y)
+        .attr("width", 16)
+        .attr("height", h)
+        .attr("fill", COLORS[n.k])
+        .attr("opacity",0.6)
+        .on("mousemove",(e)=>{
+          tooltip.style.display="block";
+          tooltip.innerHTML = `<b>${year} ${n.k}</b>: ${vals[n.k]}`;
+          tooltip.style.left = e.clientX+10+"px";
+          tooltip.style.top = e.clientY-20+"px";
+        })
+        .on("mouseleave",()=>tooltip.style.display="none");
+    });
+
+  });
+
+  // labels
+  ["Applied","HM","Panel","Accepted","Withdrawn"].forEach((t,i)=>{
+    svg.append("text")
+      .attr("x",stageX[i])
+      .attr("y",20)
+      .attr("text-anchor","middle")
+      .attr("font-size",11)
+      .text(t);
+  });
+
+}
+
+// toggle buttons
+document.querySelectorAll(".tog").forEach(btn=>{
+  btn.onclick = ()=>{
+    const y = btn.dataset.y;
+    if(visible.has(y)){
+      visible.delete(y);
+      btn.style.opacity = 0.3;
+    } else {
+      visible.add(y);
+      btn.style.opacity = 1;
+    }
+    draw();
+  };
+});
+
+draw();
+
+</script>
+
+</body>
+</html>

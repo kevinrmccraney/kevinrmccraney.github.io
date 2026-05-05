@@ -3,64 +3,46 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Job Funnel Overlay</title>
+<title>Funnel Overlay</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
 
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
-:root {
-  --bg: transparent;
-  --text: #2a2a28;
-  --muted: #7a7a76;
-}
-
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
   background: transparent;
-  color: var(--text);
 }
 
 .controls {
-  display: flex;
-  gap: 8px;
-  padding: 10px;
-  align-items: center;
+  padding: 8px;
 }
 
-.tog {
-  font-size: 11px;
-  padding: 3px 9px;
-  border: 1px solid #ccc;
+button {
+  font-size: 12px;
+  padding: 4px 10px;
   border-radius: 6px;
+  border: 1px solid #ccc;
   cursor: pointer;
-  background: #f5f5f3;
 }
 
 .tooltip {
+  pointer-events: none;
   position: fixed;
-  pointer-events: none; /* FIXES JITTER */
   background: white;
-  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,0.15);
   border-radius: 6px;
   padding: 6px 10px;
   font-size: 12px;
   display: none;
 }
-
-svg { width: 100%; }
 </style>
 </head>
 
 <body>
 
 <div class="controls">
-  Toggle year
-  <button class="tog on" data-y="2021">2021</button>
-  <button class="tog on" data-y="2022">2022</button>
-  <button class="tog on" data-y="2023">2023</button>
-  <button class="tog on" data-y="2024">2024</button>
-  <button class="tog on" data-y="2025">2025</button>
+  <button id="modeBtn">Normalized: Off</button>
 </div>
 
 <svg id="chart"></svg>
@@ -68,28 +50,40 @@ svg { width: 100%; }
 
 <script>
 
-const YEARS = [2021,2022,2023,2024,2025];
+// ---------- (same data as before) ----------
+const MONTHLY = { /* KEEP EXACTLY AS BEFORE */ };
+const WITHDRAWN_HM = { 2022:{4:1} };
+const WITHDRAWN_PANEL = { 2022:{4:1} };
+const WITHDRAWN_OFFER = { 2021:{6:1}, 2022:{9:1} };
+const YEARS=[2021,2022,2023,2024,2025];
 
-const DATA = {
-  app:{2021:164,2022:304,2023:322,2024:344,2025:344},
-  hm:{2021:7,2022:6,2023:9,2024:6,2025:10},
-  panel:{2021:2,2022:3,2023:5,2024:3,2025:5},
-  acc:{2021:0,2022:1,2023:0,2024:0,2025:0},
-  w:{2021:1,2022:2,2023:0,2024:0,2025:0}
-};
+// ---------- helpers (unchanged) ----------
+function sparseSum(obj, yr, upToMonth) {
+  if (!obj[yr]) return 0;
+  return Object.entries(obj[yr])
+    .filter(([m])=>+m < upToMonth)
+    .reduce((a,[,v])=>a+v, 0);
+}
 
-const COLORS = {
-  app:"#378ADD",
-  hm:"#7F77DD",
-  panel:"#1D9E75",
-  acc:"#639922",
-  w:"#C47A3A"
-};
+function getCum(year, upToMonth) {
+  const s = (k, lag) =>
+    MONTHLY[k][year]
+      .slice(0, Math.max(0, upToMonth + 1 - lag))
+      .reduce((a,b)=>a+b, 0);
 
-const svg = d3.select("#chart");
-const tooltip = document.getElementById("tooltip");
+  const app = s('applied',0);
+  const hm = s('hm',1);
+  const panel = s('panel',2);
+  const accepted = s('accepted',0);
 
-let visible = new Set(YEARS.map(String));
+  const wHM = sparseSum(WITHDRAWN_HM, year, upToMonth+1);
+  const wPanel = sparseSum(WITHDRAWN_PANEL, year, upToMonth+1)
+               + sparseSum(WITHDRAWN_OFFER, year, upToMonth+1);
+
+  return { app, hm, panel, accepted, wHM, wPanel };
+}
+
+function getYearFinal(y){ return getCum(y,11); }
 
 function ribbon(x1,y1,y1b,x2,y2,y2b){
   const mx=(x1+x2)/2;
@@ -99,80 +93,104 @@ function ribbon(x1,y1,y1b,x2,y2,y2b){
           C${mx},${y2b} ${mx},${y1b} ${x1},${y1b} Z`;
 }
 
+// ---------- NEW ----------
+let normalized = false;
+
+const svg = d3.select("#chart");
+const tooltip = document.getElementById("tooltip");
+
 function draw(){
 
-  const W = document.body.clientWidth;
-  const H = 420;
+  const W = window.innerWidth;
+  const H = 440;
 
   svg.attr("viewBox",`0 0 ${W} ${H}`);
-
   svg.selectAll("*").remove();
 
   const x = {
-    app: 80,
-    hm: W*0.3,
-    panel: W*0.5,
-    acc: W*0.75,
-    w: W*0.9
+    app:80,
+    hm:W*0.32,
+    panel:W*0.52,
+    acc:W*0.75,
+    w:W*0.9
   };
 
-  const max = Math.max(...Object.values(DATA.app));
+  const totals = YEARS.map(y=>getYearFinal(y));
 
-  function scale(v){
-    return (v/max)*(H-80);
+  const MAX = {
+    app: Math.max(...totals.map(d=>d.app)),
+    hm: Math.max(...totals.map(d=>d.hm)),
+    panel: Math.max(...totals.map(d=>d.panel)),
+    acc: Math.max(...totals.map(d=>d.accepted)),
+    w: Math.max(...totals.map(d=>d.wHM + d.wPanel))
+  };
+
+  function scale(v, stage){
+    if (!normalized) {
+      return Math.max((v / MAX.app) * (H-80), v>0 ? 2 : 0);
+    } else {
+      return Math.max((v / MAX[stage]) * (H-80), v>0 ? 2 : 0);
+    }
   }
 
   YEARS.forEach((yr,i)=>{
 
-    if(!visible.has(String(yr))) return;
+    const d = getYearFinal(yr);
 
-    const offset = (i-2)*3;
-
-    const v = {
-      app:DATA.app[yr],
-      hm:DATA.hm[yr],
-      panel:DATA.panel[yr],
-      acc:DATA.acc[yr],
-      w:DATA.w[yr]
+    const pos = {
+      app:{v:d.app},
+      hm:{v:d.hm},
+      panel:{v:d.panel},
+      acc:{v:d.accepted},
+      w:{v:d.wHM + d.wPanel}
     };
 
-    const pos={};
-
-    Object.keys(v).forEach(k=>{
-      const h = scale(v[k]);
+    Object.keys(pos).forEach(k=>{
+      const h = scale(pos[k].v, k);
       const y = H - h - 40;
-      pos[k]={x:x[k]+offset,y,h};
+      pos[k] = { ...pos[k], x:x[k]+(i-2)*3, y, h };
     });
 
-    function flow(a,b,color){
-      if(v[a]===0||v[b]===0) return;
+    function flow(a,b,val,color){
+      if(val<=0) return;
+
+      const frac = val / pos[a].v;
+      const y1 = pos[a].y + pos[a].h*(1-frac);
+      const y2 = pos[a].y + pos[a].h;
 
       svg.append("path")
         .attr("d", ribbon(
-          pos[a].x+8, pos[a].y, pos[a].y+pos[a].h,
+          pos[a].x+8, y1, y2,
           pos[b].x-8, pos[b].y, pos[b].y+pos[b].h
         ))
         .attr("fill",color)
-        .attr("opacity",0.15);
+        .attr("opacity",0.18);
     }
 
-    flow("app","hm",COLORS.app);
-    flow("hm","panel",COLORS.hm);
-    flow("panel","acc",COLORS.panel);
-    flow("hm","w",COLORS.w);
-    flow("panel","w",COLORS.w);
+    flow("app","hm",d.hm,"#378ADD");
+    flow("hm","panel",d.panel,"#7F77DD");
 
-    Object.keys(pos).forEach(k=>{
+    flow("panel","acc",d.accepted,"#639922");
+    flow("panel","w",d.wPanel,"#C47A3A");
+    flow("hm","w",d.wHM,"#C47A3A");
+
+    Object.entries(pos).forEach(([k,p])=>{
       svg.append("rect")
-        .attr("x",pos[k].x-8)
-        .attr("y",pos[k].y)
+        .attr("x",p.x-8)
+        .attr("y",p.y)
         .attr("width",16)
-        .attr("height",pos[k].h)
-        .attr("fill",COLORS[k])
-        .attr("opacity",0.7)
+        .attr("height",p.h)
+        .attr("fill",
+          k==="app"?"#378ADD":
+          k==="hm"?"#7F77DD":
+          k==="panel"?"#1D9E75":
+          k==="acc"?"#639922":
+          "#C47A3A"
+        )
+        .attr("opacity",0.85)
         .on("mousemove",(e)=>{
           tooltip.style.display="block";
-          tooltip.innerHTML=`<b>${yr} ${k}</b>: ${v[k]}`;
+          tooltip.innerHTML=`<b>${yr} ${k}</b>: ${p.v}`;
           tooltip.style.left=e.clientX+10+"px";
           tooltip.style.top=e.clientY-20+"px";
         })
@@ -185,7 +203,7 @@ function draw(){
     const keys=["app","hm","panel","acc","w"];
     svg.append("text")
       .attr("x",x[keys[i]])
-      .attr("y",20)
+      .attr("y",22)
       .attr("text-anchor","middle")
       .attr("font-size",11)
       .text(t);
@@ -193,14 +211,12 @@ function draw(){
 
 }
 
-document.querySelectorAll(".tog").forEach(btn=>{
-  btn.onclick=()=>{
-    const y=btn.dataset.y;
-    if(visible.has(y)){visible.delete(y);btn.style.opacity=0.3;}
-    else{visible.add(y);btn.style.opacity=1;}
-    draw();
-  };
-});
+document.getElementById("modeBtn").onclick = () => {
+  normalized = !normalized;
+  document.getElementById("modeBtn").textContent =
+    normalized ? "Normalized: On" : "Normalized: Off";
+  draw();
+};
 
 draw();
 

@@ -3,223 +3,339 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Funnel Overlay</title>
+<title>Job Search Funnel · 2021–2025</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
-
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+#js-sankey {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-  background: transparent;
+  --bg: #ffffff; --bg2: #f5f5f3; --text: #2a2a28;
+  --muted: #7a7a76; --border: rgba(0,0,0,0.10);
+  background: var(--bg); color: var(--text);
+  padding: 20px 16px 24px; max-width: 900px;
 }
-
-.controls {
-  padding: 8px;
+@media (prefers-color-scheme: dark) {
+  #js-sankey {
+    --bg: #181816; --bg2: #232320; --text: #d4d2c8;
+    --muted: #888882; --border: rgba(255,255,255,0.10);
+  }
 }
-
-button {
-  font-size: 12px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  cursor: pointer;
+#js-sankey .js-title {
+  font-size: 14px; font-weight: 600; letter-spacing: 0.01em;
+  color: var(--text); margin-bottom: 14px;
 }
-
-.tooltip {
-  pointer-events: none;
-  position: fixed;
-  background: white;
-  border: 1px solid rgba(0,0,0,0.15);
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
-  display: none;
+#js-sankey .js-controls {
+  display: flex; gap: 6px; align-items: center; flex-wrap: wrap; margin-bottom: 12px;
+}
+#js-sankey .js-btn {
+  font-size: 11px; padding: 3px 10px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: var(--bg2); color: var(--muted); transition: all 0.15s; white-space: nowrap;
+}
+#js-sankey .js-scale-wrap {
+  margin-left: auto; display: flex; align-items: center; gap: 4px;
+  font-size: 11px; color: var(--muted);
+}
+#js-sankey .js-scale-btn {
+  font-size: 11px; padding: 3px 9px; cursor: pointer;
+  border: 1px solid var(--border); border-radius: 20px;
+  background: var(--bg2); color: var(--muted); transition: all 0.15s;
+}
+#js-sankey .js-scale-btn.active {
+  background: var(--text); color: var(--bg); border-color: var(--text);
+}
+#js-sankey svg { display: block; width: 100%; overflow: visible; }
+#js-sankey .js-legend {
+  display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px;
+}
+#js-sankey .js-legend-item {
+  display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted);
+}
+#js-sankey .js-legend-swatch { width: 11px; height: 11px; border-radius: 2px; flex-shrink: 0; }
+#js-sankey .js-tooltip {
+  pointer-events: none; position: fixed; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 7px; padding: 7px 11px;
+  font-size: 12px; color: var(--text); white-space: nowrap;
+  display: none; z-index: 9999; box-shadow: 0 4px 16px rgba(0,0,0,0.14); font-family: inherit;
 }
 </style>
 </head>
-
 <body>
-
-<div class="controls">
-  <button id="modeBtn">Normalized: Off</button>
+<div id="js-sankey">
+  <div class="js-title">Job Search Funnel · 2021–2025</div>
+  <div class="js-controls">
+    <button class="js-btn" data-y="2021" onclick="jsSankey.toggle(this)">2021</button>
+    <button class="js-btn" data-y="2022" onclick="jsSankey.toggle(this)">2022</button>
+    <button class="js-btn" data-y="2023" onclick="jsSankey.toggle(this)">2023</button>
+    <button class="js-btn" data-y="2024" onclick="jsSankey.toggle(this)">2024</button>
+    <button class="js-btn" data-y="2025" onclick="jsSankey.toggle(this)">2025</button>
+    <div class="js-scale-wrap">
+      <span>Scale</span>
+      <button class="js-scale-btn" data-scale="linear" onclick="jsSankey.setScale('linear',this)">Linear</button>
+      <button class="js-scale-btn active" data-scale="sqrt" onclick="jsSankey.setScale('sqrt',this)">√ Root</button>
+    </div>
+  </div>
+  <svg id="js-svg"></svg>
+  <div class="js-legend" id="js-legend"></div>
+  <div class="js-tooltip" id="js-tooltip"></div>
 </div>
 
-<svg id="chart"></svg>
-<div class="tooltip" id="tooltip"></div>
-
 <script>
+const jsSankey = (function () {
 
-// ---------- (same data as before) ----------
-const MONTHLY = { /* KEEP EXACTLY AS BEFORE */ };
-const WITHDRAWN_HM = { 2022:{4:1} };
-const WITHDRAWN_PANEL = { 2022:{4:1} };
-const WITHDRAWN_OFFER = { 2021:{6:1}, 2022:{9:1} };
-const YEARS=[2021,2022,2023,2024,2025];
-
-// ---------- helpers (unchanged) ----------
-function sparseSum(obj, yr, upToMonth) {
-  if (!obj[yr]) return 0;
-  return Object.entries(obj[yr])
-    .filter(([m])=>+m < upToMonth)
-    .reduce((a,[,v])=>a+v, 0);
-}
-
-function getCum(year, upToMonth) {
-  const s = (k, lag) =>
-    MONTHLY[k][year]
-      .slice(0, Math.max(0, upToMonth + 1 - lag))
-      .reduce((a,b)=>a+b, 0);
-
-  const app = s('applied',0);
-  const hm = s('hm',1);
-  const panel = s('panel',2);
-  const accepted = s('accepted',0);
-
-  const wHM = sparseSum(WITHDRAWN_HM, year, upToMonth+1);
-  const wPanel = sparseSum(WITHDRAWN_PANEL, year, upToMonth+1)
-               + sparseSum(WITHDRAWN_OFFER, year, upToMonth+1);
-
-  return { app, hm, panel, accepted, wHM, wPanel };
-}
-
-function getYearFinal(y){ return getCum(y,11); }
-
-function ribbon(x1,y1,y1b,x2,y2,y2b){
-  const mx=(x1+x2)/2;
-  return `M${x1},${y1}
-          C${mx},${y1} ${mx},${y2} ${x2},${y2}
-          L${x2},${y2b}
-          C${mx},${y2b} ${mx},${y1b} ${x1},${y1b} Z`;
-}
-
-// ---------- NEW ----------
-let normalized = false;
-
-const svg = d3.select("#chart");
-const tooltip = document.getElementById("tooltip");
-
-function draw(){
-
-  const W = window.innerWidth;
-  const H = 440;
-
-  svg.attr("viewBox",`0 0 ${W} ${H}`);
-  svg.selectAll("*").remove();
-
-  const x = {
-    app:80,
-    hm:W*0.32,
-    panel:W*0.52,
-    acc:W*0.75,
-    w:W*0.9
-  };
-
-  const totals = YEARS.map(y=>getYearFinal(y));
-
-  const MAX = {
-    app: Math.max(...totals.map(d=>d.app)),
-    hm: Math.max(...totals.map(d=>d.hm)),
-    panel: Math.max(...totals.map(d=>d.panel)),
-    acc: Math.max(...totals.map(d=>d.accepted)),
-    w: Math.max(...totals.map(d=>d.wHM + d.wPanel))
-  };
-
-  function scale(v, stage){
-    if (!normalized) {
-      return Math.max((v / MAX.app) * (H-80), v>0 ? 2 : 0);
-    } else {
-      return Math.max((v / MAX[stage]) * (H-80), v>0 ? 2 : 0);
-    }
+const MONTHLY = {
+  applied: {
+    2021:[0,0,0,26,16,0,24,17,16,0,34,31], 2022:[40,39,31,31,50,23,29,31,18,9,3,0],
+    2023:[4,0,29,34,30,0,25,43,29,56,51,21], 2024:[39,34,33,16,22,50,19,33,21,36,21,21],
+    2025:[22,50,47,54,34,23,30,28,0,13,19,24]
+  },
+  hm: {
+    2021:[0,0,0,0,1,1,1,1,0,0,1,2], 2022:[0,0,0,1,2,0,0,1,1,1,1,0],
+    2023:[0,0,1,0,0,2,2,2,0,0,0,2], 2024:[0,0,0,0,1,0,1,1,0,0,2,1],
+    2025:[1,2,1,3,2,0,1,0,1,0,0,0]
+  },
+  panel: {
+    2021:[0,0,0,0,1,1,0,0,0,0,0,0], 2022:[0,0,0,0,0,0,0,2,0,1,0,0],
+    2023:[0,0,0,0,1,1,2,1,0,0,0,0], 2024:[0,0,0,0,1,0,1,1,0,0,0,0],
+    2025:[0,0,1,0,1,1,1,1,0,0,0,0]
+  },
+  accepted: {
+    2021:[0,0,0,0,0,0,0,0,0,0,0,0], 2022:[0,0,0,0,0,0,0,0,0,1,0,0],
+    2023:[0,0,0,0,0,0,0,0,0,0,0,0], 2024:[0,0,0,0,0,0,0,0,0,0,0,0],
+    2025:[0,0,0,0,0,0,0,0,0,0,0,0]
   }
-
-  YEARS.forEach((yr,i)=>{
-
-    const d = getYearFinal(yr);
-
-    const pos = {
-      app:{v:d.app},
-      hm:{v:d.hm},
-      panel:{v:d.panel},
-      acc:{v:d.accepted},
-      w:{v:d.wHM + d.wPanel}
-    };
-
-    Object.keys(pos).forEach(k=>{
-      const h = scale(pos[k].v, k);
-      const y = H - h - 40;
-      pos[k] = { ...pos[k], x:x[k]+(i-2)*3, y, h };
-    });
-
-    function flow(a,b,val,color){
-      if(val<=0) return;
-
-      const frac = val / pos[a].v;
-      const y1 = pos[a].y + pos[a].h*(1-frac);
-      const y2 = pos[a].y + pos[a].h;
-
-      svg.append("path")
-        .attr("d", ribbon(
-          pos[a].x+8, y1, y2,
-          pos[b].x-8, pos[b].y, pos[b].y+pos[b].h
-        ))
-        .attr("fill",color)
-        .attr("opacity",0.18);
-    }
-
-    flow("app","hm",d.hm,"#378ADD");
-    flow("hm","panel",d.panel,"#7F77DD");
-
-    flow("panel","acc",d.accepted,"#639922");
-    flow("panel","w",d.wPanel,"#C47A3A");
-    flow("hm","w",d.wHM,"#C47A3A");
-
-    Object.entries(pos).forEach(([k,p])=>{
-      svg.append("rect")
-        .attr("x",p.x-8)
-        .attr("y",p.y)
-        .attr("width",16)
-        .attr("height",p.h)
-        .attr("fill",
-          k==="app"?"#378ADD":
-          k==="hm"?"#7F77DD":
-          k==="panel"?"#1D9E75":
-          k==="acc"?"#639922":
-          "#C47A3A"
-        )
-        .attr("opacity",0.85)
-        .on("mousemove",(e)=>{
-          tooltip.style.display="block";
-          tooltip.innerHTML=`<b>${yr} ${k}</b>: ${p.v}`;
-          tooltip.style.left=e.clientX+10+"px";
-          tooltip.style.top=e.clientY-20+"px";
-        })
-        .on("mouseleave",()=>tooltip.style.display="none");
-    });
-
-  });
-
-  ["Applied","HM","Panel","Accepted","Withdrawn"].forEach((t,i)=>{
-    const keys=["app","hm","panel","acc","w"];
-    svg.append("text")
-      .attr("x",x[keys[i]])
-      .attr("y",22)
-      .attr("text-anchor","middle")
-      .attr("font-size",11)
-      .text(t);
-  });
-
-}
-
-document.getElementById("modeBtn").onclick = () => {
-  normalized = !normalized;
-  document.getElementById("modeBtn").textContent =
-    normalized ? "Normalized: On" : "Normalized: Off";
-  draw();
 };
 
-draw();
+const YEARS  = [2021,2022,2023,2024,2025];
+const STAGES = ['Applied','HM / Challenge','Panel','Accepted'];
+const SCOLS  = ['#378ADD','#7F77DD','#1D9E75','#639922'];
+const YCOLS  = ['#E07B39','#378ADD','#1D9E75','#9B59B6','#E23D3D'];
 
+let visible   = new Set(YEARS.map(String));
+let scaleMode = 'sqrt';
+
+const MAX_APP = Math.max(...YEARS.map(y => MONTHLY.applied[y].reduce((a,b)=>a+b,0)));
+
+function getYearFinal(yr) {
+  const s = (k, lag) => MONTHLY[k][yr].slice(0, Math.max(0, 12-lag)).reduce((a,b)=>a+b, 0);
+  return [
+    s('applied', 0),
+    s('hm',      1),
+    s('panel',   2),
+    MONTHLY.accepted[yr].reduce((a,b)=>a+b, 0)
+  ];
+}
+
+// ── Layout ────────────────────────────────────────────────────────────────────
+const CHART_H = 480;
+const PL=54, PR=20, PT=44, PB=48, NW=18, GAP=18;
+
+function getW()  { return document.getElementById('js-svg').parentElement.offsetWidth || 720; }
+function getCH() { return CHART_H - PT - PB; }
+function stageX(i) {
+  const usable = getW() - PL - PR - NW;
+  return PL + NW/2 + i * (usable / (STAGES.length - 1));
+}
+
+function scaleVal(v) {
+  if (v <= 0) return 0;
+  return scaleMode === 'sqrt' ? Math.sqrt(v) / Math.sqrt(MAX_APP) : v / MAX_APP;
+}
+
+// Allocate heights so all nodes fit within cH with even gaps
+function allocHeights(vals) {
+  const cH = getCH();
+  // Only count gaps between non-zero nodes
+  const nonZero  = vals.filter(v => v > 0).length;
+  const gapCount = Math.max(0, nonZero - 1);
+  const avail    = cH - GAP * gapCount;
+  const scales   = vals.map(scaleVal);
+  const total    = scales.reduce((a,v) => a+v, 0);
+  if (total === 0) return vals.map(() => 0);
+  let heights = scales.map(s => (s / total) * avail);
+  // Floor for non-zero values
+  heights = heights.map((h, i) => vals[i] > 0 ? Math.max(h, 4) : 0);
+  // Scale back if floor caused overflow
+  const used = heights.filter((_,i) => vals[i] > 0).reduce((a,v) => a+v, 0);
+  if (used > avail) heights = heights.map((h,i) => vals[i] > 0 ? h * avail / used : 0);
+  return heights;
+}
+
+function makeLayout(yr) {
+  const vals    = getYearFinal(yr);
+  const heights = allocHeights(vals);
+  let y = PT;
+  return vals.map((v, i) => {
+    const h = heights[i];
+    const node = { v, h, y, col: SCOLS[i], name: STAGES[i] };
+    if (h > 0) y += h + GAP;  // only advance y if node is visible
+    return node;
+  });
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function hexRgb(h) {
+  return [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
+}
+function isDark() { return matchMedia('(prefers-color-scheme:dark)').matches; }
+function tc()     { return isDark() ? '#c2c0b6' : '#5F5E5A'; }
+function gridC()  { return isDark() ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)'; }
+function ribbonD(x1,y1t,y1b,x2,y2t,y2b) {
+  const mx = (x1+x2)/2;
+  return `M${x1},${y1t} C${mx},${y1t} ${mx},${y2t} ${x2},${y2t} L${x2},${y2b} C${mx},${y2b} ${mx},${y1b} ${x1},${y1b} Z`;
+}
+
+const tipEl = document.getElementById('js-tooltip');
+function showTip(e, h) { tipEl.innerHTML=h; tipEl.style.display='block'; moveTip(e); }
+function moveTip(e) { tipEl.style.left=(e.clientX+14)+'px'; tipEl.style.top=(e.clientY-28)+'px'; }
+function hideTip() { tipEl.style.display='none'; }
+
+// ── SVG layers ────────────────────────────────────────────────────────────────
+const svg    = d3.select('#js-svg');
+const axisG  = svg.append('g');
+const yearsG = svg.append('g');
+
+function drawAxis() {
+  axisG.selectAll('*').remove();
+  const W = getW(), cH = getCH();
+  svg.attr('viewBox', `0 0 ${W} ${CHART_H}`).attr('height', CHART_H);
+
+  // Stage headers
+  STAGES.forEach((s, i) => {
+    axisG.append('text').attr('x', stageX(i)).attr('y', PT-16)
+      .attr('text-anchor','middle').attr('font-size',11).attr('font-weight',600)
+      .attr('fill', SCOLS[i]).text(s);
+  });
+
+  // Y gridlines keyed to Applied scale
+  const ticks = scaleMode === 'sqrt'
+    ? [0, 5, 20, 60, 150, MAX_APP].filter(v => v <= MAX_APP)
+    : [0, Math.round(MAX_APP*0.25), Math.round(MAX_APP*0.5), Math.round(MAX_APP*0.75), MAX_APP];
+
+  ticks.forEach(v => {
+    const frac = scaleVal(v) / scaleVal(MAX_APP);
+    const y = PT + cH * (1 - frac);
+    axisG.append('text').attr('x', PL-5).attr('y', y)
+      .attr('text-anchor','end').attr('dominant-baseline','central')
+      .attr('font-size',9).attr('fill',tc()).text(v);
+    axisG.append('line').attr('x1',PL).attr('x2',W-PR)
+      .attr('y1',y).attr('y2',y)
+      .attr('stroke',gridC()).attr('stroke-width',0.5).attr('stroke-dasharray','3,3');
+  });
+
+  axisG.append('text').attr('x', PL).attr('y', CHART_H-PB+18)
+    .attr('font-size',9).attr('fill',tc()).attr('opacity',0.4)
+    .text(scaleMode === 'sqrt' ? '√ root scale' : 'linear scale');
+}
+
+function drawYears() {
+  yearsG.selectAll('*').remove();
+
+  YEARS.forEach((yr, yi) => {
+    if (!visible.has(String(yr))) return;
+
+    const col = YCOLS[yi];
+    const [r,g,b] = hexRgb(col);
+    const nodes  = makeLayout(yr);
+    const yg     = yearsG.append('g');
+    const offset = (yi - 2) * 3;
+
+    // Ribbons between adjacent stages
+    nodes.forEach((n, si) => {
+      if (si >= nodes.length - 1) return;
+      const n2 = nodes[si+1];
+      if (n.v === 0 || n2.v === 0) return;
+      yg.append('path')
+        .attr('d', ribbonD(
+          stageX(si)+NW/2,  n.y,       n.y+n.h,
+          stageX(si+1)-NW/2, n2.y, n2.y+n2.h
+        ))
+        .attr('fill',   `rgba(${r},${g},${b},0.18)`)
+        .attr('stroke', `rgba(${r},${g},${b},0.5)`)
+        .attr('stroke-width', 0.8)
+        .on('mouseenter', e => showTip(e,
+          `<b>${yr}</b> ${STAGES[si]} → ${STAGES[si+1]}<br>${n.v.toLocaleString()} → ${n2.v.toLocaleString()}`))
+        .on('mousemove', moveTip).on('mouseleave', hideTip);
+    });
+
+    // Bars
+    nodes.forEach((n, si) => {
+      if (n.v === 0) return;
+      const x = stageX(si), barH = Math.max(n.h, 2);
+      yg.append('rect')
+        .attr('x', x-NW/2+offset).attr('y', n.y)
+        .attr('width', NW).attr('height', barH).attr('rx', 3)
+        .attr('fill',   `rgba(${r},${g},${b},0.65)`)
+        .attr('stroke', col).attr('stroke-width', 1)
+        .on('mouseenter', e => showTip(e, `<b>${yr} ${STAGES[si]}</b>: ${n.v.toLocaleString()}`))
+        .on('mousemove', moveTip).on('mouseleave', hideTip);
+
+      // Label: year '2x inside Applied if tall, count for others
+      if (n.h > 16) {
+        yg.append('text').attr('x', x+offset).attr('y', n.y+n.h/2)
+          .attr('text-anchor','middle').attr('dominant-baseline','central')
+          .attr('font-size', si===0?9:10).attr('fill','white').attr('font-weight',700)
+          .attr('pointer-events','none')
+          .text(si === 0 ? String(yr).slice(2) : n.v);
+      } else {
+        yg.append('text').attr('x', x+NW/2+offset+3).attr('y', n.y+barH/2)
+          .attr('dominant-baseline','central').attr('font-size',8)
+          .attr('fill',col).attr('font-weight',700).attr('pointer-events','none').text(n.v);
+      }
+    });
+
+    // Accepted annotation
+    const accNode = nodes[3];
+    if (accNode.v > 0) {
+      yg.append('text').attr('x', stageX(3)).attr('y', accNode.y - 10)
+        .attr('text-anchor','middle').attr('font-size',9).attr('font-weight',700)
+        .attr('fill', col).text(`✓ ${yr}`);
+    }
+  });
+
+  drawLegend();
+}
+
+function drawLegend() {
+  document.getElementById('js-legend').innerHTML = YEARS.map((yr, i) => `
+    <span class="js-legend-item" style="opacity:${visible.has(String(yr)) ? 1 : 0.25}">
+      <span class="js-legend-swatch" style="background:${YCOLS[i]}"></span>
+      ${yr}
+    </span>`).join('');
+}
+
+function redraw() { drawAxis(); drawYears(); }
+
+function toggle(btn) {
+  const y = btn.dataset.y;
+  if (visible.has(y)) { visible.delete(y); btn.classList.remove('active'); }
+  else                { visible.add(y);    btn.classList.add('active'); }
+  syncBtnColors(); drawYears();
+}
+
+function setScale(mode, btn) {
+  scaleMode = mode;
+  document.querySelectorAll('#js-sankey .js-scale-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  redraw();
+}
+
+function syncBtnColors() {
+  document.querySelectorAll('#js-sankey .js-btn[data-y]').forEach((b, i) => {
+    if (visible.has(b.dataset.y)) {
+      b.style.background = YCOLS[i]; b.style.color = '#fff'; b.style.borderColor = YCOLS[i];
+    } else {
+      b.style.background = ''; b.style.color = ''; b.style.borderColor = '';
+    }
+  });
+}
+
+window.addEventListener('resize', redraw);
+syncBtnColors();
+redraw();
+
+return { toggle, setScale };
+})();
 </script>
 </body>
 </html>

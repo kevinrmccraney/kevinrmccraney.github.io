@@ -19,6 +19,7 @@ Get in touch at [GitHub](https://github.com/kevinrmccraney) or [via email](mailt
 - [Capstone: IAC Data Model Project](./capstone.html)
 - [Open Data Literacy Internship: NLP on Public Records](./odl.html)
 - [2015 iConference Video Contest](./iconference.html)
+- [Ongoing Job Application Visualization](./job-search.html)
 
 ## ✍️ Writing
 - [Four Peaks: My Experience as a Professional Fish Counter](./fish-count.html)

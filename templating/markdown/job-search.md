@@ -23,13 +23,12 @@ This visualization tool takes a look at that data. Generated with the help of Cl
 
 <iframe src="iframes/sankey.html" style="width:100%; height:650px; border:none;"></iframe>
 
-<details>
 There's a couple of notes:
 
 - <details><summary>**It only includes data for complete years.**</summary><br>I have data going back to 2018, but it's intermittent; maybe I'll sort it out; otherwise I will update for the current year annually.</details>
 
 - <details><summary>**This only captures emailed applications and direct applications on company platforms.**</summary><br>It does not include LinkedIn applications (though I mostly don't apply there anyway) or other social media-adjacent approaches to job applications.</details>
 
-- <details><summary>**I generalized multi-step hiring funnels into two different states: hiring manager/code challenge and panel/code challenge/follow-up conversation to reduce complexity.**</details><br>In addition to producing more salient groupings for charting, it also hides anti-candidate practices. For example, the hiring process I had to repeat with pre-DOGE USDS because they forgot where I was in the pipeline, or the education technology nonprofit that took more time and more interviews to decide on whether to hire me than it took to select the new Pope, a process that was happening at the same time.</summary>
+- <details><summary>**I generalized multi-step hiring funnels into two different states: hiring manager/code challenge and panel/code challenge/follow-up conversation to reduce complexity.**</summary><br>In addition to producing more salient groupings for charting, it also hides anti-candidate practices. For example, the hiring process I had to repeat with pre-DOGE USDS because they forgot where I was in the pipeline, or the education technology nonprofit that took more time and more interviews to decide on whether to hire me than it took to select the new Pope, a process that was happening at the same time.</details>
 
 - As tempted as I am, I won't name and shame any companies on the internet. If you're concerned about your own hiring, reach out.

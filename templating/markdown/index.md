@@ -29,6 +29,7 @@ Get in touch at [GitHub](https://github.com/kevinrmccraney) or [via email](mailt
 - [Four Peaks: My Experience as a Professional Fish Counter](./fish-count.html)
 - [Questions Students Ask](./students.html)
 - [Building with AI](./building-with-ai.html)
+- [Hiring and the Job Search](./job-search.html)
 - [Troubled Worlds Curriculum Design](./troubled-worlds.html)
 - [About this Site (and Personal Sites Generally)](./this-site.html)
 
